@@ -1,14 +1,32 @@
 let searchString;
+let xcoord;
+let ycoord;
 
 chrome.contextMenus.create({
-  title: "Search by player name",
+  title: "Show Fantasy Stats",
   contexts:["selection"],
   onclick: function(e) {
-    chrome.tabs.create({url: "results.html"});
+    xcoord = (e.pageX);
+    ycoord = (e.pageY);
+    console.log(xcoord);
+    chrome.tabs.executeScript({
+      code: 'something',
+      file: 'inject.js'
+    });
+    chrome.tabs.executeScript({
+      file: "jquery.js"
+    });
+    chrome.tabs.executeScript({
+      file: "results.js"
+    });
     searchString = (e.selectionText);
-    console.log((e.selectionText));
+
+    // chrome.tabs.create({url: "results.html"});
+    // console.log((e.selectionText));
   }
 });
+
+
 
 chrome.runtime.onMessage.addListener(function(request,sender,sendResponse){
   if(request.action === 'getResults'){

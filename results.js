@@ -69,16 +69,15 @@ function searchPlayer (searchString) {
 
   });
 } else {
-  console.log("handling error");
   const httpsError = document.createElement('h3');
   httpsError.textContent = "This extension currently does not support secure websites";
   httpsError.style.textAlign = 'center';
-  const suggestion = document.createElement('h3');
-  suggestion.textContent = "You can still visit the player's page below by clicking 'Source.'";
-  suggestion.style.textAlign = 'center';
+  // const suggestion = document.createElement('h3');
+  // suggestion.textContent = "You can still visit the player's page below by clicking 'Source.'";
+  // suggestion.style.textAlign = 'center';
   const results = document.getElementById('chrome-results');
   results.appendChild(httpsError);
-  results.appendChild(suggestion);
+  // results.appendChild(suggestion);
   addSource(link);
   addClose();
 }

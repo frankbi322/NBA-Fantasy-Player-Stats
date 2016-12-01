@@ -2,7 +2,7 @@
 
 [Extension live][chrome]
 
-[chrome]: https://chrome.google.com/webstore/detail/
+[chrome]: https://chrome.google.com/webstore/detail/nba-fantasy/mpcaiajpmmiealhpeoipjmkodgijmccm
 
 **This is a chrome extension that allows users to pull up a current NBA player's season stats on any web page without needing to redirect to a dedicated webpage.
 To look up a player, select a player's name in text on the webpage, right-click the selection, and select the extension command. This will append a div element to the right side of the page that will fetch the player's data. If you select a different player on the same page afterward, it will delete the first div and replace it.

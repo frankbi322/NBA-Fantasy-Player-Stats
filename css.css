@@ -5,8 +5,9 @@
 }
 
 .results {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  position: static;
+  right: 0;
+  top: 0;
+  z-index: 1000;
   background-color: green;
 }

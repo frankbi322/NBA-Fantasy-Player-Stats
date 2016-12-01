@@ -1,17 +1,14 @@
 let searchString;
 let xcoord;
 let ycoord;
+let coords;
 
 chrome.contextMenus.create({
   title: "Show Fantasy Stats",
   contexts:["selection"],
   onclick: function(e) {
-    xcoord = (e.pageX);
-    ycoord = (e.pageY);
-    console.log(xcoord);
     chrome.tabs.executeScript({
-      code: 'something',
-      file: 'inject.js'
+        file: 'inject.js'
     });
     chrome.tabs.executeScript({
       file: "jquery.js"
@@ -19,6 +16,7 @@ chrome.contextMenus.create({
     chrome.tabs.executeScript({
       file: "results.js"
     });
+    coords = {xcoord,ycoord};
     searchString = (e.selectionText);
 
     // chrome.tabs.create({url: "results.html"});
@@ -32,7 +30,22 @@ chrome.runtime.onMessage.addListener(function(request,sender,sendResponse){
   if(request.action === 'getResults'){
     sendResponse({source: searchString});
   }
+  // else if (request.action === 'getCoords'){
+  //   sendResponse({source: coords});
+  // }
+
 });
+
+// $(document).ready(function(){
+//   $(document).mousemove(function(e){
+//     $('html').contextmenu(function(clickevent) {
+//       xcoord = clickevent.pageX;
+//       console.log(clickevent);
+//       ycoord = clickevent.pageY;
+//     });
+//   });
+// });
+
 
 
 // $(function(fName,lName) {

@@ -1,5 +1,4 @@
 chrome.runtime.sendMessage({action: 'getResults'},function(response) {
-  console.log("Response.source:" + response.source);
   searchPlayer(response.source);
 });
 
@@ -21,6 +20,17 @@ function searchPlayer (searchString) {
   let fNameCaps = fName.toUpperCase();
   let lNameCaps = lName.toUpperCase();
   let url = `http://cors.io/?http://www.basketball-reference.com/players/${lastInitial}/${lNameUrl}${fNameUrl}${index}.html/`;
+  let link = url.slice(16); //remove the cors from it
+  let prefix = document.URL.substring(0,5);
+
+
+  // if (prefix==='https'){
+  //   console.log("alert!");
+  //   alert("This extension does not support HTTPS addresses.");
+  // }
+
+  if (prefix!=='https'){
+
 
   $.get(url, function(data){
 
@@ -30,54 +40,144 @@ function searchPlayer (searchString) {
     if (meta) {
 
     let name = $(meta).find('h1').eq(0)[0].innerText;
+    let pictureSrc = $(meta).find('img')[0].src;
     let table = $(htmlData).find('tbody').eq(0);
     let season = $(table).find('tr:last-child'); // need to get last season
-    let fgp = ("FG%: " + $(season).children()[10].innerText); //done
-    let ftp = ("FT%: " + $(season).children()[20].innerText); //done
-    let ppg = ("PPG: " + $(season).children()[29].innerText); //done
-    let rpg = ("RPG: " + $(season).children()[23].innerText);
-    let apg = ("APG: " + $(season).children()[24].innerText);
-    let spg = ("SPG: " + $(season).children()[25].innerText);
-    let bpg = ("BPG: " + $(season).children()[26].innerText); //done
-    let tpg = ("TPG: " + $(season).children()[27].innerText); //done
-    let tre = ("3PG: " + $(season).children()[11].innerText); //done
-    let link = url.slice(16); //remove the cors from it
+    let seasonId = season[0].innerText.substring(0,4);
+    console.log(season[0].innerText.substring(0,4));
+    let fgp = ("Field Goal %: " + $(season).children()[10].innerText); //done
+    let ftp = ("Free Throw%: " + $(season).children()[20].innerText); //done
+    let ppg = ("Points: " + $(season).children()[29].innerText); //done
+    let rpg = ("Rebounds: " + $(season).children()[23].innerText);
+    let apg = ("Assists: " + $(season).children()[24].innerText);
+    let spg = ("Steals: " + $(season).children()[25].innerText);
+    let bpg = ("Blocks: " + $(season).children()[26].innerText); //done
+    let tpg = ("Turnovers: " + $(season).children()[27].innerText); //done
+    let tre = ("3-Pointers: " + $(season).children()[11].innerText); //done
 
-    let stats = [name,fgp,ftp,ppg,rpg,apg,spg,bpg,tpg,tre,link];
-
-    displayPlayerDetail(stats);
+    if (seasonId==='2016') {
+    let stats = [fgp,ftp,ppg,rpg,apg,spg,bpg,tpg,tre];
+    addPicture(pictureSrc);
+    addName(name);
+    displayPlayerDetail(stats,link);
+  } else {
+    handleNotInNBA();
+  }
   } else {
     handleError();
   }
 
   });
+} else {
+  console.log("handling error");
+  const httpsError = document.createElement('h3');
+  httpsError.textContent = "This extension currently does not support HTTPS websites";
+  httpsError.style.textAlign = 'center';
+  const results = document.getElementById('chrome-results');
+  results.appendChild(httpsError);
+  addClose();
+}
 }
 
-function displayPlayerDetail(stats) {
+function addName(name){
+  const playerName = document.createElement('h3');
+  playerName.textContent = name;
+  playerName.style.textAlign = 'center';
+  playerName.style.padding = '5px';
+  const results = document.getElementById('chrome-results');
+  results.appendChild(playerName);
+}
+
+
+function addPicture(imgSrc) {
+  const img = document.createElement('img');
+  img.src = imgSrc;
+  img.style.width = '92px';
+  img.style.height = '142px';
+  img.style.alignSelf = 'center';
+  const results = document.getElementById('chrome-results');
+  results.appendChild(img);
+}
+
+function displayPlayerDetail(stats,link) {
+  addHeader();
   stats.forEach(stat => {
     addStat(stat);
   });
+  addSource(link);
+  addClose();
+}
+
+function addSource(link){
+  const playerlink = document.createElement('a');
+  playerlink.href = link;
+  playerlink.textContent = "Source";
+  playerlink.style.fontColor="blue";
+  playerlink.style.textDecoration="underline";
+  const results = document.getElementById('chrome-results');
+  results.appendChild(playerlink);
 }
 
 function newListItem(){
-  const li = document.createElement('h3');
+  const li = document.createElement('span');
   li.className = "player-detail";
   return li;
+}
+
+function addHeader(){
+  const header = document.createElement('h3');
+  header.textContent = "Season Stats (Per Game):";
+  header.style.textAlign = 'center';
+  const results = document.getElementById('chrome-results');
+  results.appendChild(header);
 }
 
 function addStat(stat) {
   const li = newListItem();
   li.textContent = stat;
-  const list = document.getElementById('results');
+  const list = document.getElementById('chrome-results');
   list.appendChild(li);
 }
 
 function handleError() {
-  const error = document.createElement('h2');
+  const error = document.createElement('h3');
   error.textContent = "No player found!";
-  const results = document.getElementById('results');
+  error.style.textAlign = 'center';
+  const results = document.getElementById('chrome-results');
   results.appendChild(error);
+  addClose();
 }
+
+function handleNotInNBA(){
+  const error = document.createElement('h3');
+  error.textContent = "Error: This Player Has Not Played in 2016-17 Season";
+  error.style.textAlign = 'center';
+  const results = document.getElementById('chrome-results');
+  results.appendChild(error);
+  addClose();
+}
+
+function handleClose(){
+  var prevDiv = document.getElementById("chrome-results");
+  prevDiv.parentNode.removeChild(prevDiv);
+}
+
+function addClose(){
+  const close = document.createElement('button');
+  close.textContent = "CLOSE";
+  close.onclick = handleClose;
+  close.style.backgroundColor="#147cd1";
+  close.style.color="#fff";
+  close.style.fontWeight=400;
+  close.style.borderRadius="2px";
+  close.style.cursor="pointer";
+  close.style.textAlign="center";
+  close.style.width="auto";
+  close.style.letterSpacing="1px";
+  const results = document.getElementById('chrome-results');
+  results.appendChild(close);
+}
+
 
 function indexNum(searchString) {
 
@@ -91,7 +191,8 @@ function indexNum(searchString) {
     'bobby brown',
     'anthony brown',
     'tim hardaway',
-    'larry nance'
+    'larry nance',
+    'marshall plumlee'
 
   ];
 

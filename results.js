@@ -44,7 +44,7 @@ function searchPlayer (searchString) {
     let table = $(htmlData).find('tbody').eq(0);
     let season = $(table).find('tr:last-child'); // need to get last season
     let seasonId = season[0].innerText.substring(0,4);
-    console.log(season[0].innerText.substring(0,4));
+    // console.log(season[0].innerText.substring(0,4));
     let fgp = ("Field Goal %: " + $(season).children()[10].innerText); //done
     let ftp = ("Free Throw%: " + $(season).children()[20].innerText); //done
     let ppg = ("Points: " + $(season).children()[29].innerText); //done
@@ -61,7 +61,7 @@ function searchPlayer (searchString) {
     addName(name);
     displayPlayerDetail(stats,link);
   } else {
-    handleNotInNBA();
+    handleNotPlaying();
   }
   } else {
     handleError();
@@ -71,10 +71,15 @@ function searchPlayer (searchString) {
 } else {
   console.log("handling error");
   const httpsError = document.createElement('h3');
-  httpsError.textContent = "This extension currently does not support HTTPS websites";
+  httpsError.textContent = "This extension currently does not support secure websites";
   httpsError.style.textAlign = 'center';
+  const suggestion = document.createElement('h3');
+  suggestion.textContent = "You can still visit the player's page below by clicking 'Source.'";
+  suggestion.style.textAlign = 'center';
   const results = document.getElementById('chrome-results');
   results.appendChild(httpsError);
+  results.appendChild(suggestion);
+  addSource(link);
   addClose();
 }
 }
@@ -95,6 +100,7 @@ function addPicture(imgSrc) {
   img.style.width = '92px';
   img.style.height = '142px';
   img.style.alignSelf = 'center';
+  img.style.border = '1px solid black';
   const results = document.getElementById('chrome-results');
   results.appendChild(img);
 }
@@ -126,7 +132,7 @@ function newListItem(){
 
 function addHeader(){
   const header = document.createElement('h3');
-  header.textContent = "Season Stats (Per Game):";
+  header.textContent = "2016-17 Season Stats (Per Game):";
   header.style.textAlign = 'center';
   const results = document.getElementById('chrome-results');
   results.appendChild(header);
@@ -148,9 +154,9 @@ function handleError() {
   addClose();
 }
 
-function handleNotInNBA(){
+function handleNotPlaying(){
   const error = document.createElement('h3');
-  error.textContent = "Error: This Player Has Not Played in 2016-17 Season";
+  error.textContent = "That player hasn't played in the current season.";
   error.style.textAlign = 'center';
   const results = document.getElementById('chrome-results');
   results.appendChild(error);
@@ -192,7 +198,9 @@ function indexNum(searchString) {
     'anthony brown',
     'tim hardaway',
     'larry nance',
-    'marshall plumlee'
+    'marshall plumlee',
+    'wesley matthews',
+    'jason thompson'
 
   ];
 

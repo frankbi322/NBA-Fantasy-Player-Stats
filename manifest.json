@@ -12,6 +12,11 @@
     "default_title": "NBA Fantasy",
     "default_popup": "popup.html"
   },
+  "icons": {
+    "16": "icons/nba-logo16.png",
+    "48": "icons/nba-logo48.png",
+    "128": "icons/nba-logo128.png"
+  },
   "permissions": [
     "https://*/*",
     "http://*/*",

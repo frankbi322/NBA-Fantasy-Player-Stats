@@ -200,12 +200,16 @@ function indexNum(searchString) {
     'larry nance',
     'marshall plumlee',
     'wesley matthews',
-    'jason thompson'
+    'jason thompson',
+    'jerian grant',
+    'derrick williams',
+    'jeff green'
 
   ];
 
   let threes = [
-    'marcus morris'
+    'marcus morris',
+    'alan williams'
   ];
 
   if (threes.includes(searchString)){

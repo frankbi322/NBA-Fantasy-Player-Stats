@@ -3,7 +3,7 @@
 
   "name": "NBA Fantasy",
   "description": "To have easy access to fantasy player data",
-  "version": "0.1",
+  "version": "0.2",
   "content_security_policy": "script-src 'self' 'sha256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs='",
   "background": {
     "scripts": ["background.js"]

@@ -19,8 +19,12 @@ function searchPlayer (searchString) {
   // console.log(fNameUrl);
   let fNameCaps = fName.toUpperCase();
   let lNameCaps = lName.toUpperCase();
-  let url = `http://cors.io/?http://www.basketball-reference.com/players/${lastInitial}/${lNameUrl}${fNameUrl}${index}.html/`;
-  let link = url.slice(16); //remove the cors from it
+  // let url = `http://server9.kproxy.com/servlet/redirect.srv/sruj/snmyqesuui-efvxqcjsbd/sabc/p1/players/${lastInitial}/${lNameUrl}${fNameUrl}${index}.html?format=json`;
+
+let url =`http://www.basketball-reference.com/players/${lastInitial}/${lNameUrl}${fNameUrl}${index}.html?format=json`;
+  //  `http://cors.io/?http://www.basketball-reference.com/players/${lastInitial}/${lNameUrl}${fNameUrl}${index}.html/`;
+  // let link = url.slice(32); //remove the cors from it
+  let link = url;
   let prefix = document.URL.substring(0,5);
 
 
@@ -33,10 +37,9 @@ function searchPlayer (searchString) {
 
 
   $.get(url, function(data){
-
+    // console.log(link);
     let htmlData = data;
     let meta = $(htmlData).find('.players').children()[0];
-
     if (meta) {
 
     let name = $(meta).find('h1').eq(0)[0].innerText;
@@ -88,6 +91,7 @@ function addName(name){
   playerName.textContent = name;
   playerName.style.textAlign = 'center';
   playerName.style.padding = '5px';
+  playerName.style.fontSize = '18px';
   const results = document.getElementById('chrome-results');
   results.appendChild(playerName);
 }
@@ -132,6 +136,7 @@ function newListItem(){
 function addHeader(){
   const header = document.createElement('h3');
   header.textContent = "2016-17 Season Stats (Per Game):";
+  header.style.fontSize = '16px';
   header.style.textAlign = 'center';
   const results = document.getElementById('chrome-results');
   results.appendChild(header);
@@ -140,6 +145,7 @@ function addHeader(){
 function addStat(stat) {
   const li = newListItem();
   li.textContent = stat;
+  li.style.fontSize = 14;
   const list = document.getElementById('chrome-results');
   list.appendChild(li);
 }

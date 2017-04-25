@@ -6,8 +6,9 @@ chrome.runtime.sendMessage({action: 'getResults'},function(response) {
 
 function searchPlayer (searchString) {
   let fName = searchString.split(" ")[0];
-  fName = fName.replace('.','');
+  fName = fName.replace('.','').replace("'","");
   let lName = searchString.split(" ")[1];
+  lName = lName.replace('.','').replace("'","");
   let index = indexNum(searchString.toLowerCase());
   // console.log(fName);
   // console.log(lName);
@@ -36,8 +37,10 @@ let url =`http://www.basketball-reference.com/players/${lastInitial}/${lNameUrl}
   if (prefix!=='https'){
 
 
-  $.get(url, function(data){
-    // console.log(link);
+  $.ajax({
+    url: url,
+    success: function(data) {
+    console.log(link);
     let htmlData = data;
     let meta = $(htmlData).find('.players').children()[0];
     if (meta) {
@@ -69,7 +72,18 @@ let url =`http://www.basketball-reference.com/players/${lastInitial}/${lNameUrl}
   } else {
     handleError();
   }
-
+},
+error: function(XMLHttpRequest, textStatus, errorThrown) {
+  if (XMLHttpRequest.status == 0) {
+    alert(' Check Your Network.');
+  } else if (XMLHttpRequest.status == 404) {
+    handleError();
+  } else if (XMLHttpRequest.status == 500) {
+    alert('Internel Server Error.');
+  }  else {
+     alert('Unknow Error.\n' + XMLHttpRequest.responseText);
+  }
+}
   });
 } else {
   const httpsError = document.createElement('h3');
@@ -208,8 +222,8 @@ function indexNum(searchString) {
     'jason thompson',
     'jerian grant',
     'derrick williams',
-    'jeff green'
-
+    'jeff green',
+    'marvin williams'
   ];
 
   let threes = [

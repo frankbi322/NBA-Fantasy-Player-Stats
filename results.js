@@ -40,7 +40,7 @@ let url =`http://www.basketball-reference.com/players/${lastInitial}/${lNameUrl}
   $.ajax({
     url: url,
     success: function(data) {
-    console.log(link);
+    console.log(data);
     let htmlData = data;
     let meta = $(htmlData).find('.players').children()[0];
     if (meta) {
@@ -223,7 +223,8 @@ function indexNum(searchString) {
     'jerian grant',
     'derrick williams',
     'jeff green',
-    'marvin williams'
+    'marvin williams',
+    'taurean prince'
   ];
 
   let threes = [

@@ -14,7 +14,7 @@ chrome.contextMenus.create({
       file: "jquery.js"
     });
     chrome.tabs.executeScript({
-      file: "results.js"
+      file: "results2.js"
     });
     coords = {xcoord,ycoord};
     searchString = (e.selectionText);
